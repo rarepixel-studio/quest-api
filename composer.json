@@ -1,0 +1,24 @@
+{
+    "name": "opilo/quest-api",
+    "description": "This is a client of Opilo Questionnaire",
+    "keywords": ["Opilo", "questionnaire", "survey"],
+    "authors": [
+        {
+            "name": "Hossein Jazayeri",
+            "email": "jerzi.net@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "guzzlehttp/guzzle": "~6.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.*",
+        "mockery/mockery": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "QuestApi\\": "src/"
+        }
+    }
+}
