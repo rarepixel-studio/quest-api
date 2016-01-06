@@ -4,13 +4,13 @@ namespace QuestApiTest\Integration;
 
 use Exception;
 use PHPUnit_Framework_TestCase;
-use QuestApi\HttpClient;
+use QuestApi\QuestionnaireAPI;
 
-class HttpClientTest extends PHPUnit_Framework_TestCase
+class QuestionnaireAPITest extends PHPUnit_Framework_TestCase
 {
     public function test_say_hi()
     {
-        $client   = new HttpClient();
+        $client   = new QuestionnaireAPI();
         $response = $client->sayHi();
         $this->assertEquals('hi', $response);
     }
@@ -18,7 +18,7 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
     public function test_create_private_answer_sheet_not_enough_arguments()
     {
         $exceptionThrown = false;
-        $client          = new HttpClient();
+        $client          = new QuestionnaireAPI();
         try {
             $client->createPrivateAnswerSheet(null, null);
         } catch (Exception $e) {
@@ -30,7 +30,7 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
 
     public function test_create_private_answer_sheet()
     {
-        $client   = new HttpClient();
+        $client   = new QuestionnaireAPI();
         $response = $client->createPrivateAnswerSheet(1, 'cf935c02c17326a649569ef');
         $this->assertEquals('success', $response['status']);
         $this->assertNotEmpty($response['link']);

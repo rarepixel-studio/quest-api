@@ -5,7 +5,7 @@ namespace QuestApi;
 use GuzzleHttp\Client;
 use GuzzleHttp\Message\ResponseInterface;
 
-class HttpClient
+class QuestionnaireAPI
 {
     /**
      * @var Client
