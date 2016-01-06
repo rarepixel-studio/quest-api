@@ -48,8 +48,8 @@ class HttpClient
         /** @var ResponseInterface $response */
         $response = $this->client->$method($uri, [
             'query' => array_merge($query, [
-                'username' => getenv('USERNAME'),
-                'password' => getenv('PASSWORD'),
+                'username' => getenv('QUESTIONNAIRE_USERNAME'),
+                'password' => getenv('QUESTIONNAIRE_PASSWORD'),
             ]),
         ]);
 
