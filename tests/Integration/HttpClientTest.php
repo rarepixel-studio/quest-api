@@ -2,7 +2,7 @@
 
 namespace QuestApiTest\Integration;
 
-use GuzzleHttp\Exception\ClientException;
+use Exception;
 use PHPUnit_Framework_TestCase;
 use QuestApi\HttpClient;
 
@@ -21,9 +21,9 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
         $client          = new HttpClient();
         try {
             $client->createPrivateAnswerSheet(null, null);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $exceptionThrown = true;
-            $this->assertEquals(ClientException::class, get_class($e));
+            $this->assertEquals(Exception::class, get_class($e));
         }
         $this->assertTrue($exceptionThrown);
     }

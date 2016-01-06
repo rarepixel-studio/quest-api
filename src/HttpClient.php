@@ -3,7 +3,7 @@
 namespace QuestApi;
 
 use GuzzleHttp\Client;
-use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\Message\ResponseInterface;
 
 class HttpClient
 {
@@ -15,14 +15,14 @@ class HttpClient
     public function __construct()
     {
         $this->client = new Client([
-            'base_uri' => getenv('QUESTIONNAIRE_URL') . '/api-client/',
+            'base_url' => getenv('QUESTIONNAIRE_URL') . '/api-client/',
             'defaults' => ['exceptions' => false],
         ]);
     }
 
     public function createPrivateAnswerSheet($questionnaire_id, $questionnaire_hash)
     {
-        $response = $this->makeRequest('POST', 'create-private-answer-sheet', [
+        $response = $this->makeRequest('post', 'create-private-answer-sheet', [
             'questionnaire_id'   => $questionnaire_id,
             'questionnaire_hash' => $questionnaire_hash,
         ], true, true);
@@ -31,7 +31,7 @@ class HttpClient
 
     public function sayHi()
     {
-        return $this->makeRequest('GET', 'say-hi');
+        return $this->makeRequest('get', 'say-hi');
     }
 
     /**
@@ -46,7 +46,7 @@ class HttpClient
     private function makeRequest($method, $uri, $query = [], $decode = true, $assoc = false)
     {
         /** @var ResponseInterface $response */
-        $response = $this->client->request($method, $uri, [
+        $response = $this->client->$method($uri, [
             'query' => array_merge($query, [
                 'username' => getenv('USERNAME'),
                 'password' => getenv('PASSWORD'),
