@@ -22,11 +22,18 @@ class QuestionnaireAPI
 
     public function createPrivateAnswerSheet($questionnaire_id, $questionnaire_hash)
     {
-        $response = $this->makeRequest('post', 'create-private-answer-sheet', [
+        return $this->makeRequest('post', 'create-private-answersheet', [
             'questionnaire_id'   => $questionnaire_id,
             'questionnaire_hash' => $questionnaire_hash,
-        ], true, true);
-        return $response;
+        ]);
+    }
+
+    public function getAllPrivateQuestionnaires($page = 1, $perPage = 20)
+    {
+        return $this->makeRequest('get', 'all-private-questionnaires', [
+            'page'     => $page,
+            'per_page' => $perPage,
+        ]);
     }
 
     public function sayHi()
@@ -38,12 +45,10 @@ class QuestionnaireAPI
      * @param string $method e.g: GET, POST
      * @param string $uri
      * @param array $query
-     * @param bool $decode
-     * @param bool $assoc
-     * @return string | array
+     * @return array|string
      * @throws \Exception
      */
-    private function makeRequest($method, $uri, $query = [], $decode = true, $assoc = false)
+    private function makeRequest($method, $uri, $query = [])
     {
         /** @var ResponseInterface $response */
         $response = $this->client->$method($uri, [
@@ -57,10 +62,6 @@ class QuestionnaireAPI
             throw new \Exception($response->getBody()->getContents());
         }
 
-        if ($decode) {
-            return json_decode($response->getBody()->getContents(), $assoc);
-        } else {
-            return $response->getBody()->getContents();
-        }
+        return json_decode($response->getBody()->getContents(), true);
     }
 }
