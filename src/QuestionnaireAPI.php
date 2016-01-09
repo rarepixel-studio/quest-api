@@ -20,19 +20,17 @@ class QuestionnaireAPI
         ]);
     }
 
-    public function createPrivateAnswerSheet($questionnaire_id, $questionnaire_hash)
+    public function createAnswerSheet($questionnaireId)
     {
-        return $this->makeRequest('post', 'create-private-answersheet', [
-            'questionnaire_id'   => $questionnaire_id,
-            'questionnaire_hash' => $questionnaire_hash,
+        return $this->makeRequest('post', 'create-answersheet', [
+            'questionnaire_id' => $questionnaireId,
         ]);
     }
 
-    public function getAllPrivateQuestionnaires($page = 1, $perPage = 20)
+    public function getAnswersheetStatus($answersheetId)
     {
-        return $this->makeRequest('get', 'all-private-questionnaires', [
-            'page'     => $page,
-            'per_page' => $perPage,
+        return $this->makeRequest('get', 'answersheet-status', [
+            'answersheet_id' => $answersheetId,
         ]);
     }
 

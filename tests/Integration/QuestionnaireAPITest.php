@@ -26,11 +26,11 @@ class QuestionnaireAPITest extends PHPUnit_Framework_TestCase
         $this->assertEquals('hi', $response);
     }
 
-    public function test_create_private_answer_sheet_not_enough_arguments()
+    public function test_create_answer_sheet_not_enough_arguments()
     {
         $exceptionThrown = false;
         try {
-            $this->client->createPrivateAnswerSheet(null, null);
+            $this->client->createAnswerSheet(null);
         } catch (Exception $e) {
             $exceptionThrown = true;
             $this->assertEquals(Exception::class, get_class($e));
@@ -38,31 +38,45 @@ class QuestionnaireAPITest extends PHPUnit_Framework_TestCase
         $this->assertTrue($exceptionThrown);
     }
 
-    public function test_create_private_answer_sheet()
+    public function test_create_answer_sheet()
     {
-        $response = $this->client->createPrivateAnswerSheet(1, 'cf935c02c17326a649569ef');
+        $response = $this->client->createAnswerSheet(1);
         $this->assertEquals('success', $response['status']);
         $this->assertArrayHasKey('link', $response);
         $this->assertNotEmpty($response['link']);
-        $this->assertStringStartsWith(getenv('QUESTIONNAIRE_URL') . '/answer-sheet', $response['link']);
+        $this->assertStringStartsWith('http://survey.dev/answer-sheet/' . $response['answersheet_id'], $response['link']);
     }
 
-    public function test_get_all_private_questionnaires_more_that_100_per_page_throws_exception()
+    public function test_create_answer_sheet_questionnaire_not_found()
     {
         $exceptionThrown = false;
         try {
-            $this->client->getAllPrivateQuestionnaires(1, 150);
+            $this->client->createAnswerSheet(12);
         } catch (Exception $e) {
             $exceptionThrown = true;
-            $this->assertEquals(json_encode(['errors' => ['per_page' => ['validation.max.numeric']]]), $e->getMessage());
+            $this->assertEquals(['status' => 'questionnaire[12] not found'], json_decode($e->getMessage(), true));
         }
         $this->assertTrue($exceptionThrown);
     }
 
-    public function test_get_all_private_questionnaires()
+    public function test_get_answersheet_status_not_created()
     {
-        $response = $this->client->getAllPrivateQuestionnaires();
-        $this->assertEquals('success', $response['status']);
-        $this->assertArrayHasKey('questionnaires', $response);
+        $exceptionThrown = false;
+        try {
+            $this->client->getAnswersheetStatus(5465);
+        } catch (Exception $e) {
+            $exceptionThrown = true;
+            $this->assertEquals(Exception::class, get_class($e));
+        }
+        $this->assertTrue($exceptionThrown);
+    }
+
+    public function test_get_answersheet_status()
+    {
+        $response = $this->client->createAnswerSheet(1);
+        $status   = $this->client->getAnswersheetStatus($response['answersheet_id']);
+        $this->assertEquals([
+            'status' => 'not started yet',
+        ], $status);
     }
 }
