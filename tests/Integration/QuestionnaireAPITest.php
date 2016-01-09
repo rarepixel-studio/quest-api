@@ -58,25 +58,4 @@ class QuestionnaireAPITest extends PHPUnit_Framework_TestCase
         }
         $this->assertTrue($exceptionThrown);
     }
-
-    public function test_get_answersheet_status_not_created()
-    {
-        $exceptionThrown = false;
-        try {
-            $this->client->getAnswersheetStatus(5465);
-        } catch (Exception $e) {
-            $exceptionThrown = true;
-            $this->assertEquals(Exception::class, get_class($e));
-        }
-        $this->assertTrue($exceptionThrown);
-    }
-
-    public function test_get_answersheet_status()
-    {
-        $response = $this->client->createAnswerSheet(1);
-        $status   = $this->client->getAnswersheetStatus($response['answersheet_id']);
-        $this->assertEquals([
-            'status' => 'not started yet',
-        ], $status);
-    }
 }
