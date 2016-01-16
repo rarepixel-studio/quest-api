@@ -17,7 +17,7 @@ class QuestionnaireAPITest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->client = new QuestionnaireAPI();
+        $this->client = new QuestionnaireAPI(getenv('QUESTIONNAIRE_URL'), getenv('QUESTIONNAIRE_USERNAME'), getenv('QUESTIONNAIRE_PASSWORD'));
     }
 
     public function test_say_hi()
@@ -44,7 +44,7 @@ class QuestionnaireAPITest extends PHPUnit_Framework_TestCase
         $this->assertEquals('success', $response['status']);
         $this->assertArrayHasKey('link', $response);
         $this->assertNotEmpty($response['link']);
-        $this->assertStringStartsWith('http://survey.dev/answer-sheet/' . $response['answersheet_id'], $response['link']);
+        $this->assertStringStartsWith('http://survey.dev/answersheet/' . $response['answersheet_id'], $response['link']);
     }
 
     public function test_create_answer_sheet_questionnaire_not_found()

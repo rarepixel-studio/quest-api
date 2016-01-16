@@ -12,12 +12,18 @@ class HttpClient
      */
     protected $client;
 
-    public function __construct()
+    private $username;
+
+    private $password;
+
+    public function __construct($baseUrl, $username, $password)
     {
-        $this->client = new Client([
-            'base_url' => getenv('QUESTIONNAIRE_URL') . '/api-client/',
+        $this->client   = new Client([
+            'base_url' => $baseUrl . '/api-client/',
             'defaults' => ['exceptions' => false],
         ]);
+        $this->username = $username;
+        $this->password = $password;
     }
 
 
@@ -33,8 +39,8 @@ class HttpClient
         /** @var ResponseInterface $response */
         $response = $this->client->$method($uri, [
             'query' => array_merge($query, [
-                'username' => getenv('QUESTIONNAIRE_USERNAME'),
-                'password' => getenv('QUESTIONNAIRE_PASSWORD'),
+                'username' => $this->username,
+                'password' => $this->password,
             ]),
         ]);
 

@@ -1,4 +1,4 @@
-/vendor
+vendor
 composer.lock
-/.idea
-/tests/boot/env.php
+.idea
+tests/boot/env.php
