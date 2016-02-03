@@ -3,6 +3,7 @@
 namespace QuestApiTest\Integration;
 
 use Exception;
+use GuzzleHttp\Exception\ClientException;
 use PHPUnit_Framework_TestCase;
 use QuestApi\QuestionnaireAPI;
 
@@ -33,7 +34,7 @@ class QuestionnaireAPITest extends PHPUnit_Framework_TestCase
             $this->client->createAnswerSheet(null);
         } catch (Exception $e) {
             $exceptionThrown = true;
-            $this->assertEquals(Exception::class, get_class($e));
+            $this->assertEquals(ClientException::class, get_class($e));
         }
         $this->assertTrue($exceptionThrown);
     }
@@ -52,9 +53,9 @@ class QuestionnaireAPITest extends PHPUnit_Framework_TestCase
         $exceptionThrown = false;
         try {
             $this->client->createAnswerSheet(12);
-        } catch (Exception $e) {
+        } catch (ClientException $e) {
             $exceptionThrown = true;
-            $this->assertEquals(['status' => 'questionnaire[12] not found'], json_decode($e->getMessage(), true));
+            $this->assertEquals(['status' => 'questionnaire[12] not found'], json_decode($e->getResponse()->getBody()->getContents(), true));
         }
         $this->assertTrue($exceptionThrown);
     }

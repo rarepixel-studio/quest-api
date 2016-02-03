@@ -3,7 +3,7 @@
 namespace QuestApi;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Message\ResponseInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class HttpClient
 {
@@ -19,7 +19,7 @@ class HttpClient
     public function __construct($baseUrl, $username, $password)
     {
         $this->client   = new Client([
-            'base_url' => $baseUrl . '/api-client/',
+            'base_uri' => $baseUrl . '/api-client/',
             'defaults' => ['exceptions' => false],
         ]);
         $this->username = $username;
@@ -28,7 +28,7 @@ class HttpClient
 
 
     /**
-     * @param string $method e.g: GET, POST
+     * @param string $method e.g: get, post, delete
      * @param string $uri
      * @param array $query
      * @return array|string
