@@ -19,8 +19,8 @@ class HttpClient
     public function __construct($baseUrl, $username, $password)
     {
         $this->client   = new Client([
-            'base_uri' => $baseUrl . '/api-client/',
-            'defaults' => ['exceptions' => false],
+            'base_uri'   => $baseUrl . '/api-client/',
+            'exceptions' => false,
         ]);
         $this->username = $username;
         $this->password = $password;
