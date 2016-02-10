@@ -45,7 +45,7 @@ class QuestionnaireAPITest extends PHPUnit_Framework_TestCase
         $this->assertEquals('success', $response['status']);
         $this->assertArrayHasKey('link', $response);
         $this->assertNotEmpty($response['link']);
-        $this->assertStringStartsWith('http://survey.dev/answersheet/' . $response['answersheet_id'], $response['link']);
+        $this->assertStringStartsWith(getenv('QUESTIONNAIRE_URL') . '/answersheet/' . $response['answersheet_id'], $response['link']);
     }
 
     public function test_create_answer_sheet_questionnaire_not_found()
