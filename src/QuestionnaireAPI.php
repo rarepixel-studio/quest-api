@@ -2,9 +2,11 @@
 
 namespace QuestApi;
 
+use QuestApi\Exceptions\QuestException;
+
 class QuestionnaireAPI extends HttpClient
 {
-    public function createAnswerSheet($questionnaireId, $pushBackUrl = null)
+    public function createAnswersheet($questionnaireId, $pushBackUrl = null)
     {
         $response = $this->makeRequest('post', 'create-answersheet', [
             'questionnaire_id' => $questionnaireId,
@@ -14,7 +16,7 @@ class QuestionnaireAPI extends HttpClient
         if (array_key_exists('status', $response) && array_key_exists('answersheet_id', $response) && array_key_exists('link', $response) && $response['status'] == 'success') {
             return $response;
         } else {
-            throw new \Exception('Invalid response for questionnaire[' . $questionnaireId . ']');
+            throw new QuestException('Invalid response for questionnaire[' . $questionnaireId . ']');
         }
     }
 

@@ -4,6 +4,7 @@ namespace QuestApi;
 
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
+use QuestApi\Exceptions\QuestException;
 
 class HttpClient
 {
@@ -44,10 +45,12 @@ class HttpClient
             ]),
         ]);
 
+        $contents = $response->getBody()->getContents();
+
         if ($response->getStatusCode() != 200) {
-            throw new \Exception($response->getBody()->getContents());
+            throw new QuestException($contents);
         }
 
-        return json_decode($response->getBody()->getContents(), true);
+        return json_decode($contents, true);
     }
 }

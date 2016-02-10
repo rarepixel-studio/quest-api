@@ -2,8 +2,8 @@
 
 namespace QuestApiTest\Integration;
 
-use Exception;
 use PHPUnit_Framework_TestCase;
+use QuestApi\Exceptions\QuestException;
 use QuestApi\QuestionnaireAPI;
 
 class QuestionnaireAPITest extends PHPUnit_Framework_TestCase
@@ -26,36 +26,37 @@ class QuestionnaireAPITest extends PHPUnit_Framework_TestCase
         $this->assertEquals('hi', $response);
     }
 
-    public function test_create_answer_sheet_not_enough_arguments()
+    public function test_create_answersheet_without_enough_arguments()
     {
         $exceptionThrown = false;
         try {
-            $this->client->createAnswerSheet(null);
-        } catch (Exception $e) {
+            $this->client->createAnswersheet(null);
+        } catch (QuestException $e) {
             $exceptionThrown = true;
-            $this->assertEquals(Exception::class, get_class($e));
+            $this->assertEquals(QuestException::class, get_class($e));
+            $this->assertTrue(array_key_exists('errors', json_decode($e->getMessage())));
         }
         $this->assertTrue($exceptionThrown);
     }
 
-    public function test_create_answer_sheet()
-    {
-        $response = $this->client->createAnswerSheet(1);
-        $this->assertEquals('success', $response['status']);
-        $this->assertArrayHasKey('link', $response);
-        $this->assertNotEmpty($response['link']);
-        $this->assertStringStartsWith(getenv('QUESTIONNAIRE_URL') . '/answersheet/' . $response['answersheet_id'], $response['link']);
-    }
-
-    public function test_create_answer_sheet_questionnaire_not_found()
+    public function test_create_answersheet_for_not_invalid_questionnaire()
     {
         $exceptionThrown = false;
         try {
-            $this->client->createAnswerSheet(1111111111);
-        } catch (Exception $e) {
+            $this->client->createAnswersheet(1111111111);
+        } catch (QuestException $e) {
             $exceptionThrown = true;
             $this->assertEquals(['status' => 'questionnaire[1111111111] not found'], json_decode($e->getMessage(), true));
         }
         $this->assertTrue($exceptionThrown);
+    }
+
+    public function test_create_answersheet()
+    {
+        $response = $this->client->createAnswersheet(1);
+        $this->assertEquals('success', $response['status']);
+        $this->assertArrayHasKey('link', $response);
+        $this->assertNotEmpty($response['link']);
+        $this->assertStringStartsWith(getenv('QUESTIONNAIRE_URL') . '/answersheet/' . $response['answersheet_id'], $response['link']);
     }
 }
