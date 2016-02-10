@@ -52,10 +52,10 @@ class QuestionnaireAPITest extends PHPUnit_Framework_TestCase
     {
         $exceptionThrown = false;
         try {
-            $this->client->createAnswerSheet(12);
+            $this->client->createAnswerSheet(1111111111);
         } catch (Exception $e) {
             $exceptionThrown = true;
-            $this->assertEquals(['status' => 'questionnaire[12] not found'], json_decode($e->getMessage(), true));
+            $this->assertEquals(['status' => 'questionnaire[1111111111] not found'], json_decode($e->getMessage(), true));
         }
         $this->assertTrue($exceptionThrown);
     }
