@@ -2,6 +2,7 @@
 
 namespace QuestApiTest\Integration;
 
+use GuzzleHttp\Exception\RequestException;
 use PHPUnit_Framework_TestCase;
 use QuestApi\Exceptions\QuestException;
 use QuestApi\QuestionnaireAPI;
@@ -33,8 +34,9 @@ class QuestionnaireAPITest extends PHPUnit_Framework_TestCase
             $this->client->createAnswersheet(null);
         } catch (QuestException $e) {
             $exceptionThrown = true;
-            $this->assertEquals(QuestException::class, get_class($e));
-            $this->assertTrue(array_key_exists('errors', json_decode($e->getMessage())));
+            $this->assertInstanceOf(RequestException::class, $e->getPrevious());
+            $this->assertEquals(422, $e->getCode());
+            $this->assertTrue(array_key_exists('errors', json_decode($e->getHTTPResponseBody())));
         }
         $this->assertTrue($exceptionThrown);
     }
@@ -46,7 +48,9 @@ class QuestionnaireAPITest extends PHPUnit_Framework_TestCase
             $this->client->createAnswersheet(1111111111);
         } catch (QuestException $e) {
             $exceptionThrown = true;
-            $this->assertEquals(['status' => 'questionnaire[1111111111] not found'], json_decode($e->getMessage(), true));
+            $this->assertInstanceOf(RequestException::class, $e->getPrevious());
+            $this->assertEquals(404, $e->getCode());
+            $this->assertEquals(['status' => 'questionnaire[1111111111] not found'], json_decode($e->getHTTPResponseBody(), true));
         }
         $this->assertTrue($exceptionThrown);
     }
