@@ -11,7 +11,7 @@ class QuestionnaireAPI extends HttpClient
             'push_back_url'    => $pushBackUrl,
         ]);
 
-        if (array_keys($response) == ['status', 'answersheet_id', 'link'] && $response['status'] == 'success') {
+        if (array_key_exists('status', $response) && array_key_exists('answersheet_id', $response) && array_key_exists('link', $response) && $response['status'] == 'success') {
             return $response;
         } else {
             throw new \Exception('Invalid response for questionnaire[' . $questionnaireId . ']');

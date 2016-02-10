@@ -3,7 +3,6 @@
 namespace QuestApiTest\Integration;
 
 use Exception;
-use GuzzleHttp\Exception\ClientException;
 use PHPUnit_Framework_TestCase;
 use QuestApi\QuestionnaireAPI;
 
